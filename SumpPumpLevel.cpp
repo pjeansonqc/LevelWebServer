@@ -74,11 +74,18 @@ String SumpPumpLevel::getDebugStatus()
 	return lMsg;
 }
 
-String SumpPumpLevel::getStatus()
+String SumpPumpLevel::getHtmlStatus()
 {
-	String lMsg="";
-	lMsg += "  Average.:" + String(mAverage) + "\n";
-
-	lMsg += "\n";
+	String lMsg="<h1>Readings:</h1>";
+	// lMsg += "<p>  min.....:" + String(mMinRead) + "</p>\n";
+	// lMsg += "<p>  max.....:" + String(mMaxRead) + "</p>\n";
+	// lMsg += "<p>  Total...:" + String(mTotal)   + "</p>\n";
+	lMsg += "<p>  Level.:" + String(mAverage) + "</p>\n";
+	lMsg += "<p>    last levels:";
+	for (std::vector<int>::iterator it = mReadings.begin();it != mReadings.end();++it)
+	{
+		lMsg += String(*it) + ",";
+	}
+	lMsg += "</p>\n";
 	return lMsg;
 }

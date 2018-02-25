@@ -17,7 +17,6 @@ public:
 	SumpPumpLevel( unsigned int iSize=10);
 	int getLevel();
 	void execute(void);
-	String getStatus();
 	String getHtmlStatus();
 	String getError(){return String(" ");}
 	String getDebugStatus();
@@ -41,4 +40,4 @@ private:
 
 
 };
-#endif // G_SENDER
+#endif // SUMPPUMPLEVEL_H

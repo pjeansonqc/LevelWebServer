@@ -23,7 +23,9 @@ by Tom Igoe
 #include <SPI.h>
 #include "WiFi.h"
 #include "String.h"
+#include "time.h"
 #include "SumpPumpLevel.h"
+#include "LevelHistory.h"
 
 char ssid[] = "LesJeansonRicher";      //  your network SSID (name)
 char pass[] = "LesJeansonsGentils";   // your network password
@@ -31,17 +33,12 @@ int keyIndex = 0;                 // your network key Index number (needed only 
 
 int status = WL_IDLE_STATUS;
 WiFiServer server(80);
-SumpPumpLevel sump(4);
+SumpPumpLevel sump(10);
+LevelHistory levelHistory(100);
+unsigned int elapsedTime = 0;
 void setup() 
 {
 	Serial.begin(9600);      // initialize serial communication
-    
-	
-	//return;
-	
-	
-	
-	
 	
 	// attempt to connect to Wifi network:
 	while (status != WL_CONNECTED) 
@@ -87,10 +84,11 @@ void loop()
 						client.println("HTTP/1.1 200 OK");
 						client.println("Content-type:text/html");
 						client.println();
-						client.println(sump.getStatus());
-						// the content of the HTTP response follows the header:
-						client.print("Click <a href=\"/H\">here</a> turn the LED on pin 9 on<br>");
-						client.print("Click <a href=\"/L\">here</a> turn the LED on pin 9 off<br>");
+						client.println(sump.getHtmlStatus());
+						client.println(levelHistory.getDebugStatus());
+						// // the content of the HTTP response follows the header:
+						// client.print("Click <a href=\"/H\">here</a> turn the LED on pin 9 on<br>");
+						// client.print("Click <a href=\"/L\">here</a> turn the LED on pin 9 off<br>");
 
 						// The HTTP response ends with another blank line:
 						client.println();
@@ -122,6 +120,12 @@ void loop()
 		client.stop();
 		Serial.println("client disconnected");
 		Serial.print(sump.getDebugStatus());
+		Serial.print(levelHistory.getDebugStatus());
+	}
+	if(millis() - elapsedTime > 10000)
+	{
+		levelHistory.addLevel(sump.getLevel());
+		elapsedTime = millis();
 	}
 	
 	//Serial.print("Raw:" + String(analogRead(A3) ) + "\n");
