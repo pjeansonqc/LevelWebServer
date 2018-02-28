@@ -14,8 +14,8 @@ mTotal(0),                  // the running mTotal
 mAverage(0),                // the average
 mRawReadPort(A13),
 mInputPin(A3),  //Pin A3
-mMinRead(1023),
-mMaxRead(0),
+mMinRead(0),
+mMaxRead(4095),
 mNumReadingsMax(iSize)
 {
 	mReadings.resize(mNumReadingsMax, 0);
@@ -29,8 +29,6 @@ void SumpPumpLevel::execute(void)
 	int lRead = 0; // Reading remapped from 0 to 100
 	// read from the sensor:
 	lRawRead = getSample();
-	mMinRead = _min(lRawRead, mMinRead);
-	mMaxRead = _max(lRawRead, mMaxRead);
 	// Re-Scale to 0-100%
 	if (mMaxRead - mMinRead != 0)
 	{
