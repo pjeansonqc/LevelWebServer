@@ -35,7 +35,7 @@ int status = WL_IDLE_STATUS;
 WiFiServer server(80);
 SumpPumpLevel sump(10);
 LevelHistory levelHistory(100);
-unsigned int elapsedTime = 0;
+unsigned int elapsedTime = millis();
 void setup() 
 {
 	Serial.begin(9600);      // initialize serial communication
@@ -53,7 +53,7 @@ void setup()
 	}
 	server.begin();                           // start the web server on port 80
 	printWifiStatus();                        // you're connected now, so print out the status
-
+  elapsedTime = millis();
 }
 
 
@@ -85,7 +85,7 @@ void loop()
 						client.println("Content-type:text/html");
 						client.println();
 						client.println(sump.getHtmlStatus());
-						client.println(levelHistory.getDebugStatus());
+						client.println(levelHistory.getHtmlStatus());
 						// // the content of the HTTP response follows the header:
 						// client.print("Click <a href=\"/H\">here</a> turn the LED on pin 9 on<br>");
 						// client.print("Click <a href=\"/L\">here</a> turn the LED on pin 9 off<br>");
@@ -122,7 +122,7 @@ void loop()
 		Serial.print(sump.getDebugStatus());
 		Serial.print(levelHistory.getDebugStatus());
 	}
-	if(millis() - elapsedTime > 10000)
+	if(abs(millis() - elapsedTime) > 1000 * 10) // every 60 seconds
 	{
 		levelHistory.addLevel(sump.getLevel());
 		elapsedTime = millis();

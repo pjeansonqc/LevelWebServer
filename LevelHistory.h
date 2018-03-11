@@ -11,7 +11,6 @@
 #include "arduino.h"
 #include <deque>
 
-
 class LevelHistory
 {
 public:
@@ -23,7 +22,8 @@ protected:
 	
 private:
 	
-	std::deque<int>  mLevels;      // the readings from the analog input
-	unsigned int mMaxNumberOfLevels;
+	std::deque<int> mLevels;      // the readings from the analog input
+	unsigned int    mMaxNumberOfLevels;
+  
 };
 #endif // LEVEL_HISTORY_H
